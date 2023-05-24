@@ -3,32 +3,44 @@ class Board
 
   def initialize(name1, name2)
 
-    @player1 = name1
-
-    @player2 = name2
-
     @cups = Array.new(14) {Array.new(4, :stone)}
 
     @cups[13].clear 
     @cups[6].clear
 
+    @name1 = name1
+    @name2 = name2
+
+    # @current_player_name = name1 
+
   end
 
-  def [](pos)
+  # def current_player_name
 
-    row, col = pos 
+  #   if @current_player_name == @name1 
+  #     @current_player_name = @name2
+  #   else 
+  #     @current_player_name = @name1 
+  #   end 
 
-    @cups[row][col]
 
-  end 
+  # end
 
-  def []=(pos, val)
+  # def [](pos)
 
-    row, col = pos 
+  #   row, col = pos 
 
-    @cups[row][col] = val
+  #   @cups[row][col]
 
-  end 
+  # end 
+
+  # def []=(pos, val)
+
+  #   row, col = pos 
+
+  #   @cups[row][col] = val
+
+  # end 
 
   def place_stones
     # helper method to #initialize every non-store cup with four stones each
@@ -59,8 +71,10 @@ class Board
 
     until stones.empty?
       cup_idx = (cup_idx + 1) % 14
-      next if (current_player_name == @player2 && cup_idx == 13) || (current_player_name == @player1 && cup_idx == 6)
+      unless (current_player_name == @name1 && cup_idx == 13) || (current_player_name == @name2 && cup_idx == 6)
       cups[cup_idx] << stones.pop
+      end
+      next_turn(cups[cup_idx])
     end
 
   end 
@@ -70,7 +84,7 @@ class Board
 
   def render
     print "      #{@cups[7..12].reverse.map { |cup| cup.count }}      \n"
-    puts "#{@cups[13].count} #{[store2]} -------------------------- #{[store1]} #{@cups[6].count}"
+    puts "#{@cups[13].count} #{['store2']} -------------------------- #{['store1']} #{@cups[6].count}"
     print "      #{@cups.take(6).map { |cup| cup.count }}      \n"
     puts ""
     puts ""
